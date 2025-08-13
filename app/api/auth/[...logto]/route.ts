@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   redirect('/dashboard');
 }
 
-export async function POST(_request: NextRequest) {
+export async function POST() {
   // Handle other auth-related POST requests if needed
   return new Response('Method not allowed', { status: 405 });
 }

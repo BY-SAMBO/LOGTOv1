@@ -1,8 +1,7 @@
-import { NextRequest } from 'next/server';
 import { redirect } from 'next/navigation';
 import { logtoConfig } from '../../../logto';
 
-export async function GET(_request: NextRequest) {
+export async function GET() {
   try {
     // Redirect to Logto sign in
     const signInUrl = `${logtoConfig.endpoint}/oidc/auth?client_id=${logtoConfig.appId}&redirect_uri=${encodeURIComponent(logtoConfig.baseUrl + '/callback')}&response_type=code&scope=openid profile&state=signin`;
