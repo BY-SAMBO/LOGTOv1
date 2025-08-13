@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Bootcamp Innovation Center",
-  description: "Advanced Learning Environment - Empowering Tomorrow's Leaders",
+  title: "Xtrategia",
+  description: "Plataforma Avanzada de Innovación - Potenciado por Industrias Galgo",
 };
 
 export default function RootLayout({

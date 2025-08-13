@@ -1,16 +1,17 @@
 'use client';
 
-interface SignInProps {
-  onSignIn: () => void;
-}
+export default function SignIn() {
+  const handleSignIn = () => {
+    // Redirect to Logto sign-in endpoint
+    window.location.href = '/api/auth/sign-in';
+  };
 
-export default function SignIn({ onSignIn }: SignInProps) {
   return (
     <button
-      onClick={() => onSignIn()}
-      className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+      onClick={handleSignIn}
+      className="btn btn-primary animate-gentle-glow hover-lift transition-smooth rounded-lg px-6 py-3 text-base font-semibold"
     >
-      Sign In with Logto
+      Iniciar Sesión con Logto
     </button>
   );
 }

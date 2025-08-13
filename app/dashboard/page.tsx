@@ -1,32 +1,101 @@
+'use client';
+
+import { useLogto } from '@logto/next/client';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import SignOut from '../components/sign-out';
+
 export default function Dashboard() {
-  return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">
-          Welcome to your Dashboard
-        </h1>
-        
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold mb-4">
-            🎉 Authentication Successful!
-          </h2>
-          <p className="text-gray-600">
-            You have successfully authenticated with Logto. Your application is now ready for production.
-          </p>
-          
-          <div className="mt-6 p-4 bg-green-50 rounded-lg">
-            <h3 className="text-lg font-medium text-green-800 mb-2">
-              Next Steps:
-            </h3>
-            <ul className="text-green-700 space-y-1">
-              <li>• Add user profile information</li>
-              <li>• Implement role-based access control</li>
-              <li>• Add logout functionality</li>
-              <li>• Build your SaaS features</li>
-            </ul>
-          </div>
+  const { isAuthenticated, user, isLoading } = useLogto();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push('/login');
+    }
+  }, [isAuthenticated, isLoading, router]);
+
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
+          <p className="mt-4 text-secondary">Cargando...</p>
         </div>
       </div>
+    );
+  }
+
+  // Don't render dashboard if not authenticated (will redirect)
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  // Extract user name from user object
+  const userName = user?.name || user?.email || 'Usuario';
+
+  return (
+    <div className="dashboard-container animate-fade-in-up">
+      <header className="dashboard-header">
+        <div className="flex justify-between items-center mb-4">
+          <div>
+            <h1 className="heading-1 text-accent animate-soft-pulse">Xtrategia</h1>
+            <p className="text-secondary">Plataforma Avanzada de Innovación</p>
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="text-right">
+              <p className="text-sm text-secondary">Bienvenido,</p>
+              <p className="text-lg font-medium text-accent">{userName}</p>
+            </div>
+            <SignOut />
+          </div>
+        </div>
+      </header>
+      
+      <main className="container">
+        <div className="widget-elevated hover-lift transition-smooth animate-gentle-glow">
+          <div className="widget-header">
+            <h2 className="widget-title text-accent">
+              Autenticación Exitosa
+            </h2>
+          </div>
+          <div className="widget-content">
+            <p className="text-secondary mb-6">
+              Has iniciado sesión exitosamente con Logto. Tu aplicación está lista para usar.
+            </p>
+            
+            <div className="widget energy-accent p-4 bg-surface-elevated rounded-md border border-accent">
+              <h3 className="heading-5 text-accent mb-4">
+                Próximos Pasos:
+              </h3>
+              <ul className="text-secondary space-y-2">
+                <li className="flex items-center gap-3">
+                  <span className="w-2 h-2 bg-accent rounded-full animate-pulse-glow"></span>
+                  Agregar información del perfil de usuario
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="w-2 h-2 bg-accent rounded-full animate-pulse-glow"></span>
+                  Implementar control de acceso basado en roles
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="w-2 h-2 bg-accent rounded-full animate-pulse-glow"></span>
+                  Agregar funcionalidad de cierre de sesión
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="w-2 h-2 bg-accent rounded-full animate-pulse-glow"></span>
+                  Desarrollar características de tu SaaS
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer className="dashboard-footer">
+        <p className="text-caption">Xtrategia &copy; 2024</p>
+        <p className="text-caption mt-2 font-medium">Industrias Galgo</p>
+      </footer>
     </div>
   );
 }

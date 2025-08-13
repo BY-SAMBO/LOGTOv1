@@ -14,6 +14,13 @@
   --color-black: #000000;
   --color-white: #ffffff;
   
+  /* Yellow Energy Colors */
+  --color-yellow-primary: #FFD700;
+  --color-yellow-secondary: #FFA500;
+  --color-yellow-soft: rgba(255, 215, 0, 0.1);
+  --color-yellow-glow: rgba(255, 215, 0, 0.3);
+  --color-yellow-subtle: rgba(255, 215, 0, 0.05);
+  
   /* Grayscale Palette */
   --color-gray-50: #fafafa;
   --color-gray-100: #f5f5f5;
@@ -33,7 +40,8 @@
   --color-surface-elevated: var(--color-gray-800);
   --color-border: var(--color-gray-700);
   --color-border-subtle: var(--color-gray-800);
-  --color-accent: var(--color-white);
+  --color-accent: var(--color-yellow-primary);
+  --color-accent-secondary: var(--color-yellow-secondary);
   --color-muted: var(--color-gray-500);
   
   /* Typography Colors */
@@ -41,6 +49,7 @@
   --color-text-secondary: var(--color-gray-300);
   --color-text-muted: var(--color-gray-500);
   --color-text-disabled: var(--color-gray-600);
+  --color-text-accent: var(--color-yellow-primary);
 }
 
 /* --------------------------------------------------------------------------
@@ -351,19 +360,46 @@ body {
 
 /* Primary Button */
 .btn-primary {
-  background: var(--color-white);
+  background: var(--color-accent);
   color: var(--color-black);
-  border: 1px solid var(--color-white);
+  border: 1px solid var(--color-accent);
+  position: relative;
+  overflow: hidden;
+  font-weight: var(--font-weight-semibold);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: var(--color-gray-200);
-  border-color: var(--color-gray-200);
+  background: var(--color-accent-secondary);
+  border-color: var(--color-accent-secondary);
+  box-shadow: 0 0 15px var(--color-yellow-glow);
+  transform: translateY(-1px);
 }
 
 .btn-primary:active:not(:disabled) {
-  background: var(--color-gray-300);
-  border-color: var(--color-gray-300);
+  background: #E6AC00;
+  border-color: #E6AC00;
+  transform: translateY(0);
+}
+
+/* Accent Button */
+.btn-accent {
+  background: transparent;
+  color: var(--color-accent);
+  border: 2px solid var(--color-accent);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-accent:hover:not(:disabled) {
+  background: var(--color-yellow-soft);
+  color: var(--color-accent);
+  box-shadow: 0 0 20px var(--color-yellow-glow);
+  transform: translateY(-1px);
+}
+
+.btn-accent:active:not(:disabled) {
+  background: var(--color-yellow-glow);
+  transform: translateY(0);
 }
 
 /* Secondary Button */
@@ -371,15 +407,20 @@ body {
   background: transparent;
   color: var(--color-white);
   border: 1px solid var(--color-border);
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-secondary:hover:not(:disabled) {
   background: var(--color-surface-elevated);
-  border-color: var(--color-white);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  box-shadow: 0 0 10px var(--color-yellow-soft);
 }
 
 .btn-secondary:active:not(:disabled) {
   background: var(--color-gray-700);
+  border-color: var(--color-accent-secondary);
 }
 
 /* Ghost Button */
@@ -527,6 +568,10 @@ body {
 .bg-surface-elevated { background: var(--color-surface-elevated); }
 .bg-white { background: var(--color-white); }
 .bg-black { background: var(--color-black); }
+.bg-yellow-soft { background: var(--color-yellow-soft); }
+
+/* Border Colors */
+.border-accent { border-color: var(--color-accent); }
 
 /* --------------------------------------------------------------------------
    12. DASHBOARD SPECIFIC STYLES
@@ -710,7 +755,217 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   15. RESPONSIVE BREAKPOINTS
+   15. ANIMATION SYSTEM
+   -------------------------------------------------------------------------- */
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--color-yellow-soft), 0 0 10px var(--color-yellow-soft);
+    opacity: 0.8;
+  }
+  50% {
+    box-shadow: 0 0 10px var(--color-yellow-glow), 0 0 20px var(--color-yellow-glow), 0 0 30px var(--color-yellow-glow);
+    opacity: 1;
+  }
+}
+
+@keyframes softPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 1;
+  }
+}
+
+@keyframes gentleGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px var(--color-yellow-soft);
+  }
+  50% {
+    box-shadow: 0 0 15px var(--color-yellow-glow);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Animation Utility Classes */
+.animate-pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+.animate-soft-pulse {
+  animation: softPulse 4s ease-in-out infinite;
+}
+
+.animate-gentle-glow {
+  animation: gentleGlow 2s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, var(--color-yellow-soft), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease-out;
+}
+
+/* Energy Elements */
+.energy-accent {
+  position: relative;
+  overflow: hidden;
+}
+
+.energy-accent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--color-yellow-soft), transparent);
+  transition: left 0.5s ease-in-out;
+}
+
+.energy-accent:hover::before {
+  left: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   16. LOGIN SPECIFIC STYLES
+   -------------------------------------------------------------------------- */
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  position: relative;
+  background: radial-gradient(ellipse at center, var(--color-gray-900), var(--color-black));
+}
+
+.login-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  padding: var(--space-8);
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  z-index: 10;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
+.login-header h1 {
+  margin-bottom: var(--space-2);
+}
+
+.login-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.welcome-section {
+  text-align: center;
+}
+
+.welcome-section h2 {
+  margin-bottom: var(--space-3);
+  color: var(--color-text-primary);
+}
+
+.login-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.login-security {
+  text-align: center;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.login-footer {
+  margin-top: var(--space-8);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.brand-info {
+  text-align: center;
+}
+
+.brand-info p:first-child {
+  margin-bottom: var(--space-1);
+}
+
+.background-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, var(--color-yellow-soft), transparent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.3;
+  z-index: 1;
+}
+
+.w-full {
+  width: 100%;
+}
+
+/* Text Accent Utility */
+.text-accent {
+  color: var(--color-accent);
+}
+
+.border-accent {
+  border-color: var(--color-accent);
+}
+
+/* --------------------------------------------------------------------------
+   17. RESPONSIVE BREAKPOINTS
    -------------------------------------------------------------------------- */
 
 @media (max-width: 768px) {

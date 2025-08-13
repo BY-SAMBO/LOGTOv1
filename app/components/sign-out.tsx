@@ -1,16 +1,41 @@
 'use client';
 
-interface SignOutProps {
-  onSignOut: () => void;
-}
+import { useRouter } from 'next/navigation';
 
-export default function SignOut({ onSignOut }: SignOutProps) {
+export default function SignOut() {
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    try {
+      // Call the Logto sign out endpoint
+      const response = await fetch('/api/auth/sign-out', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (response.ok) {
+        // Redirect to home page after successful sign out
+        router.push('/');
+      } else {
+        console.error('Sign out failed');
+        // Fallback redirect
+        router.push('/');
+      }
+    } catch (error) {
+      console.error('Sign out error:', error);
+      // Fallback redirect to home page
+      router.push('/');
+    }
+  };
+
   return (
     <button
-      onClick={() => onSignOut()}
-      className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+      onClick={handleSignOut}
+      className="btn btn-secondary hover-lift transition-smooth rounded-lg px-4 py-2 text-sm font-medium"
     >
-      Sign Out
+      Cerrar Sesión
     </button>
   );
 }
