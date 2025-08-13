@@ -1,0 +1,57 @@
+services:
+    n0skw8g8g0owgkk0og4ck0gk-010842639682:
+        image: 'n0skw8g8g0owgkk0og4ck0gk:70b92e241c60b136ee83e6b96963fe242696f295'
+        container_name: n0skw8g8g0owgkk0og4ck0gk-010842639682
+        restart: unless-stopped
+        expose:
+            - '3000'
+        networks:
+            coolify:
+                aliases:
+                    - n0skw8g8g0owgkk0og4ck0gk-010842639682
+        mem_limit: '0'
+        memswap_limit: '0'
+        mem_swappiness: 60
+        mem_reservation: '0'
+        cpus: 0.0
+        cpu_shares: 1024
+        env_file:
+            - .env
+        labels:
+            - traefik.enable=true
+            - traefik.http.middlewares.gzip.compress=true
+            - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+            - traefik.http.routers.http-0-n0skw8g8g0owgkk0og4ck0gk.entryPoints=http
+            - traefik.http.routers.http-0-n0skw8g8g0owgkk0og4ck0gk.middlewares=redirect-to-https
+            - 'traefik.http.routers.http-0-n0skw8g8g0owgkk0og4ck0gk.rule=Host(`xtrategia.industriasgalgo.com`) && PathPrefix(`/`)'
+            - traefik.http.routers.http-0-n0skw8g8g0owgkk0og4ck0gk.service=http-0-n0skw8g8g0owgkk0og4ck0gk
+            - traefik.http.routers.https-0-n0skw8g8g0owgkk0og4ck0gk.entryPoints=https
+            - traefik.http.routers.https-0-n0skw8g8g0owgkk0og4ck0gk.middlewares=gzip
+            - 'traefik.http.routers.https-0-n0skw8g8g0owgkk0og4ck0gk.rule=Host(`xtrategia.industriasgalgo.com`) && PathPrefix(`/`)'
+            - traefik.http.routers.https-0-n0skw8g8g0owgkk0og4ck0gk.service=https-0-n0skw8g8g0owgkk0og4ck0gk
+            - traefik.http.routers.https-0-n0skw8g8g0owgkk0og4ck0gk.tls.certresolver=letsencrypt
+            - traefik.http.routers.https-0-n0skw8g8g0owgkk0og4ck0gk.tls=true
+            - traefik.http.services.http-0-n0skw8g8g0owgkk0og4ck0gk.loadbalancer.server.port=3000
+            - traefik.http.services.https-0-n0skw8g8g0owgkk0og4ck0gk.loadbalancer.server.port=3000
+            - 'caddy_0.encode=zstd gzip'
+            - 'caddy_0.handle_path.0_reverse_proxy={{upstreams 3000}}'
+            - 'caddy_0.handle_path=/*'
+            - caddy_0.header=-Server
+            - 'caddy_0.try_files={path} /index.html /index.php'
+            - 'caddy_0=https://xtrategia.industriasgalgo.com'
+            - caddy_ingress_network=coolify
+            - coolify.managed=true
+            - coolify.version=4.0.0-beta.420.6
+            - coolify.applicationId=13
+            - coolify.type=application
+            - coolify.name=n0skw8g8g0owgkk0og4ck0gk
+            - coolify.resourceName=b-y-s-a-m-b-o-saas-logtomain-b4k48owo8kck8c4okkk440go
+            - coolify.projectName=bancamia
+            - coolify.serviceName=b-y-s-a-m-b-o-saas-logtomain-b4k48owo8kck8c4okkk440go
+            - coolify.environmentName=production
+            - coolify.pullRequestId=0
+networks:
+    coolify:
+        external: true
+        name: coolify
+        attachable: true
