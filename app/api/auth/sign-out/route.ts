@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { handleSignOut } from '@logto/next/server-actions';
-import { logtoConfig } from '../../../logto';
 
 export async function POST(request: NextRequest) {
   try {
-    // Handle Logto sign out
-    const response = await handleSignOut(logtoConfig, '/');
+    // Clear any authentication cookies and redirect to home
+    const response = NextResponse.redirect(new URL('/', request.url));
+    
+    // Clear Logto related cookies
+    response.cookies.delete('logto:user');
+    response.cookies.delete('logto:idToken');
+    response.cookies.delete('logto:accessToken');
+    response.cookies.delete('logto:refreshToken');
+    
     return response;
   } catch (error) {
     console.error('Sign out error:', error);

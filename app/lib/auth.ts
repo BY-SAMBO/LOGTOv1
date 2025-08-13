@@ -1,16 +1,31 @@
-import { getLogtoContext } from '@logto/next/server-actions';
-import { logtoConfig } from '../logto';
-import { NextRequest } from 'next/server';
 import { cookies } from 'next/headers';
 
 export async function getAuthInfo() {
   try {
     const cookieStore = await cookies();
-    const context = await getLogtoContext(logtoConfig, cookieStore);
+    
+    // Simple cookie-based auth check
+    const userCookie = cookieStore.get('logto:user');
+    const accessToken = cookieStore.get('logto:accessToken');
+    
+    if (userCookie && accessToken) {
+      try {
+        const userData = JSON.parse(userCookie.value);
+        return {
+          isAuthenticated: true,
+          user: userData
+        };
+      } catch {
+        return {
+          isAuthenticated: false,
+          user: null
+        };
+      }
+    }
     
     return {
-      isAuthenticated: context.isAuthenticated,
-      user: context.claims || null
+      isAuthenticated: false,
+      user: null
     };
   } catch (error) {
     console.error('Auth check error:', error);
@@ -23,5 +38,5 @@ export async function getAuthInfo() {
 
 export type AuthInfo = {
   isAuthenticated: boolean;
-  user: any;
+  user: Record<string, unknown> | null;
 };

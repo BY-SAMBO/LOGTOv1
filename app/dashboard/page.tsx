@@ -1,39 +1,17 @@
-'use client';
-
-import { useLogto } from '@logto/next/client';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { getAuthInfo } from '../lib/auth';
+import { redirect } from 'next/navigation';
 import SignOut from '../components/sign-out';
 
-export default function Dashboard() {
-  const { isAuthenticated, user, isLoading } = useLogto();
-  const router = useRouter();
+export default async function Dashboard() {
+  const { isAuthenticated, user } = await getAuthInfo();
 
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push('/login');
-    }
-  }, [isAuthenticated, isLoading, router]);
-
-  // Show loading state while checking authentication
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
-          <p className="mt-4 text-secondary">Cargando...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Don't render dashboard if not authenticated (will redirect)
+  // Redirect if not authenticated
   if (!isAuthenticated) {
-    return null;
+    redirect('/');
   }
 
   // Extract user name from user object
-  const userName = user?.name || user?.email || 'Usuario';
+  const userName = user?.name || user?.email || user?.username || 'Usuario';
 
   return (
     <div className="dashboard-container animate-fade-in-up">
