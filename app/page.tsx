@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 export default function BootcampDashboard() {
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [, setCurrentTime] = useState(new Date());
   const [selectedTimezone, setSelectedTimezone] = useState('Asia/Tokyo');
 
   const timezones = [
@@ -191,7 +191,7 @@ export default function BootcampDashboard() {
       </main>
 
       <footer className="dashboard-footer">
-        <p className="text-caption">Innovation Center &copy; 2024 - Empowering Tomorrow's Leaders</p>
+        <p className="text-caption">Innovation Center &copy; 2024 - Empowering Tomorrow&apos;s Leaders</p>
       </footer>
     </div>
   );
